@@ -1,0 +1,94 @@
+$size-ratio: (
+    'small': 30,
+    'medium': 50,
+    'large': 70,
+);
+$color: #fff;
+$ballRange: 1 2 3 4;
+$margin: 2px;
+@keyframes pacman1 {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(-44deg);
+    }
+}
+
+@keyframes pacman2 {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(44deg);
+    }
+}
+@mixin generateBalls($color, $i, $size, $name) {
+    width: #{round($size / 3)}px;
+    height: #{round($size / 3)}px;
+    background-color: $color;
+    margin: $margin;
+    border-radius: 100%;
+    transform: translate(0, #{$size / 4}px);
+    position: absolute;
+    top: #{$size / 2}px;
+    left: #{$size * 4}px;
+    animation: ball-#{$name} 1s $i * 0.25s infinite linear;
+    animation-fill-mode: both;
+}
+
+.pacman_spinner {
+    @each $name, $size in $size-ratio {
+        &.pacman_#{$name} {
+            @keyframes ball-#{$name} {
+                75% {
+                    opacity: 0.7;
+                }
+                100% {
+                    transform: translate(-4px * $size, #{round($size / 4)}px);
+                }
+            }
+
+            .pac {
+                width: 0;
+                height: 0;
+                border-right: #{$size}px solid transparent;
+                border-top: #{$size}px solid transparent;
+                border-left: #{$size}px solid $color;
+                border-bottom: #{$size}px solid $color;
+                border-radius: #{$size}px;
+                position: absolute;
+                animation: pacman1 0.8s infinite ease-in-out;
+                animation-fill-mode: both;
+                left: -#{$size/2}px;
+            }
+
+            .man {
+                width: 0;
+                height: 0;
+                left: -#{$size/2}px;
+                border-right: #{$size}px solid transparent;
+                border-top: #{$size}px solid $color;
+                border-left: #{$size}px solid $color;
+                border-bottom: #{$size}px solid transparent;
+                border-radius: #{$size}px;
+                position: absolute;
+                animation: pacman2 0.8s infinite ease-in-out;
+                animation-fill-mode: both;
+            }
+
+            @each $val in $ballRange {
+                .ballStyle#{$val} {
+                    @include generateBalls($color, $val, $size, $name);
+                }
+            }
+
+            .outerWrapper {
+                position: relative;
+                width: #{$size}px;
+                height: #{$size}px;
+                margin: #{$size}px;
+            }
+        }
+    }
+}

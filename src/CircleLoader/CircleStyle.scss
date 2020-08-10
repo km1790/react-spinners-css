@@ -1,0 +1,45 @@
+.circleSpinner {
+    $size: 100;
+    $circleRange: 0 1 2 3 4;
+    $color: #fff;
+
+    @keyframes circle {
+        0% {
+            transform: rotate(0deg);
+        }
+        50% {
+            transform: rotate(180deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @mixin generateCircle($size, $color, $i) {
+        position: absolute;
+        height: 100% - ($i * 10);
+        width: 100% - ($i * 10);
+        //   width: calc(20% - #{$size * (1 - $i / 10)}px);
+        border: 1px solid $color;
+        border-radius: 100%;
+        transition: 2s;
+        border-bottom: none;
+        border-right: none;
+        top: $i * 0.7 * 2.5%;
+        left: $i * 0.7 * 2.5%;
+        animation-fill-mode: '';
+        animation: circle 1s #{($i * 0.2)}s infinite linear;
+    }
+
+    @each $val in $circleRange {
+        .circle#{$val + 1} {
+            @include generateCircle($size, $color, $val);
+        }
+    }
+
+    .outerWrapper {
+        position: relative;
+        width: #{$size}px;
+        height: #{$size}px;
+    }
+}
